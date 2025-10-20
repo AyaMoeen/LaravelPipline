@@ -14,6 +14,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       
+      - name: Get commit hash
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
       - name: Login to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
@@ -21,6 +25,6 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/project:latest .
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/project:v1.0 .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.sha_short }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/project:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/project:v1.0
+          docker push ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.sha_short }}
