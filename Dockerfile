@@ -4,8 +4,11 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     git \
-    curl
-    
+    curl \
+    unzip \
+    libzip-dev && docker-php-ext-install zip
+
+
 
 RUN docker-php-ext-install bcmath
 
