@@ -16,8 +16,10 @@ jobs:
       
       - name: Get version
         id: vars
-        run: echo "version=v$(date +'%Y.%m.%d')" >> $GITHUB_OUTPUT
-        
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "version=v$(date +'%Y.%m.%d-%H%M%S')" >> $GITHUB_OUTPUT
+
       - name: Login to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
@@ -25,6 +27,6 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/project:latest .
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.sha_short }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/project:latest ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.version }}
           docker push ${{ secrets.DOCKER_USERNAME }}/project:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.sha_short }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.version }}
