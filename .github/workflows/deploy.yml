@@ -27,3 +27,4 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.version }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.version }}
           echo "Pushed image as ${{ steps.vars.outputs.version }}"
+          
