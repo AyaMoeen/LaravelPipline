@@ -30,3 +30,4 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME }}/project:latest ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.version }}
           docker push ${{ secrets.DOCKER_USERNAME }}/project:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/project:${{ steps.vars.outputs.version }}
+          
